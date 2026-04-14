@@ -147,8 +147,7 @@ function InteractiveStep1Code() {
       </div>
 
       <div className="code-explanation">
-        <strong>Spiegazione:</strong>{" "}
-        {codeSnippets[1].explanation}
+        <strong>Spiegazione:</strong> {codeSnippets[1].explanation}
       </div>
     </>
   );

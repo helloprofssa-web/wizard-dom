@@ -17,6 +17,10 @@ function isActive(target, current) {
   return groups[current]?.includes(target) || false;
 }
 
+function treeClass(keyName, selected) {
+  return isActive(keyName, selected) ? "tree-node-active" : "";
+}
+
 export default function Step1Dom() {
   const [selected, setSelected] = useState(null);
 
@@ -72,11 +76,7 @@ export default function Step1Dom() {
             ├─ li
             └─ li`}</pre>
 
-          <div className="tree-legend">
-            <p className="panel-text">
-              Clicca una riga del codice nella sidebar a sinistra: vedrai evidenziato l'elemento corrispondente nella pagina.
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>
