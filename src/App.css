@@ -1,0 +1,335 @@
+* {
+  box-sizing: border-box;
+}
+
+/* ===== BASE ===== */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  color: #111827;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+code {
+  background: #e0e7ff;
+  color: #1e3a8a;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* ===== LAYOUT GENERALE ===== */
+
+.app-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 24px 32px;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: minmax(420px, 500px) 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.main-layout.full {
+  grid-template-columns: 1fr;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.right-column,
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel,
+.panel-body,
+.right-column,
+.page-content,
+.two-columns,
+.main-layout {
+  min-width: 0;
+}
+
+/* ===== HEADER ===== */
+
+.top-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.top-panel h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: #0f172a;
+}
+
+.top-panel p {
+  margin: 0;
+  color: #334155;
+  line-height: 1.7;
+}
+
+.step-badge {
+  background: #dbeafe;
+  color: #1e3a8a;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ===== PROGRESS ===== */
+
+.progress-wrap {
+  width: 100%;
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #0f172a;
+}
+
+/* ===== STEP ===== */
+
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.step-card {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.step-card.active {
+  background: #0f172a;
+  color: white;
+}
+
+.step-title {
+  font-weight: 700;
+}
+
+.step-subtitle {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+/* ===== PANEL ===== */
+
+.panel {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 700;
+}
+
+.panel-body {
+  padding: 18px;
+}
+
+/* ===== CODICE ===== */
+
+.code-columns {
+  display: grid;
+  gap: 14px;
+}
+
+.code-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.code-block {
+  background: #020617;
+  color: #f8fafc;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 14px;
+  width: 100%;
+  overflow-x: auto;
+  font-family: "Consolas", monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.code-line {
+  display: flex;
+  gap: 12px;
+}
+
+.code-number {
+  width: 36px;
+  text-align: right;
+  color: #94a3b8;
+}
+
+.code-text {
+  white-space: pre;
+}
+
+/* ===== CODICE INTERATTIVO ===== */
+
+.interactive-code-block {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.interactive-code-line {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  color: white;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.interactive-code-line:hover {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.interactive-code-line-active {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.interactive-code-number {
+  width: 36px;
+  text-align: right;
+  color: #94a3b8;
+}
+
+.interactive-code-text {
+  white-space: pre;
+}
+
+/* ===== DEMO ===== */
+
+.demo-box {
+  padding: 16px;
+  border-radius: 16px;
+  border: 2px solid;
+}
+
+.demo-box-blue {
+  background: #eff6ff;
+}
+
+.demo-box-violet {
+  background: #f5f3ff;
+}
+
+.demo-box-green {
+  background: #ecfdf5;
+}
+
+.demo-title {
+  font-size: 1.5rem;
+}
+
+/* ===== HIGHLIGHT DOM ===== */
+
+.dom-highlight {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.dom-highlight-text {
+  background: #dbeafe;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.dom-highlight-button {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.dom-highlight-list {
+  background: #e0f2fe;
+}
+
+/* ===== ALBERO ===== */
+
+.tree-block {
+  background: #020617;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: monospace;
+  white-space: pre;
+}
+
+/* ===== BUTTON ===== */
+
+.primary-btn {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+
+.secondary-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+}
