@@ -780,3 +780,13 @@ button:disabled {
 .function-list{
   text-align: left;
 }
+
+.hl-blue {
+  color: #0f172a;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  padding: 4px 8px;
+  display: inline-block;
+  font-weight: 700;
+}

@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
 import "../App.css";
 
 const step1Lines = [
@@ -30,12 +31,12 @@ const step2HtmlLines = [
   "<!DOCTYPE html>",
   '<html lang="it">',
   "  <body>",
-  '    <h1 id="titolo">Titolo iniziale</h1>',
+  '    <h1 id="titolo"><span>Primo</span> Titolo Della nostra pagina</h1>',
   '    <p class="messaggio">Messaggio con classe</p>',
   "",
-  '    <input type="text" name="email" value="studente1@example.com" />',
-  '    <input type="text" name="email" value="studente2@example.com" />',
-  '    <input type="text" name="email" value="studente3@example.com" />',
+  '    <input type="email" name="email" value="studente1@example.com" />',
+  '    <input type="email" name="email" value="studente2@example.com" />',
+  '    <input type="email" name="email" value="studente3@example.com" />',
   "",
   '    <script src="script.js"></script>',
   "  </body>",
@@ -74,12 +75,12 @@ const codeSnippets = {
     html: `<!DOCTYPE html>
 <html lang="it">
   <body>
-    <h1 id="titolo">Titolo iniziale</h1>
+    <h1 id="titolo"><strong>Primo</strong> Titolo Della nostra pagina</h1>
     <p class="messaggio">Messaggio con classe</p>
 
-    <input type="text" name="email" value="studente1@example.com"/>
-    <input type="text" name="email" value="studente2@example.com"/>
-    <input type="text" name="email" value="studente3@example.com"/>
+    <input type="email" name="email" value="studente1@example.com"/>
+    <input type="email" name="email" value="studente2@example.com"/>
+    <input type="email" name="email" value="studente3@example.com"/>
 
     <script src="script.js"></script>
   </body>
@@ -111,7 +112,7 @@ for (let i = 0; i < email.length; i++) {
 alert("Questo è un esempio di alert.");`,
 
     explanation:
-      "Qui vediamo una vera pagina web: l'HTML definisce gli elementi, mentre JavaScript li seleziona e li modifica. getElementById restituisce un solo elemento; getElementsByClassName e getElementsByName restituiscono una collezione di elementi.",
+      "In questo step esploriamo i principali metodi di selezione degli elementi.\n Vediamo anche come modificare il contenuto con innerHTML e come mostrare un messaggio con alert.",
   },
 
   3: {
@@ -344,6 +345,17 @@ function InteractiveStep1Code() {
 function InteractiveStep2Code() {
   const [activeAction, setActiveAction] = useState(null);
 
+  useEffect(() => {
+    const handler = (event) => {
+      if (event.detail?.action) {
+        setActiveAction(event.detail.action);
+      }
+    };
+
+    window.addEventListener("step2-highlight", handler);
+    return () => window.removeEventListener("step2-highlight", handler);
+  }, []);
+
   const actionLines = {
     id: [3],
     class: [4],
@@ -361,44 +373,45 @@ function InteractiveStep2Code() {
   };
 
   const trigger = (action) => {
+    if (!action) return;
+
     setActiveAction(action);
-    try {
-      window.dispatchEvent(
-        new CustomEvent("step2-highlight", {
-          detail: { action },
-        })
-      );
-    } catch (e) {
-      console.log("Event dispatch failed:", e);
-    }
+    window.dispatchEvent(
+      new CustomEvent("step2-highlight", {
+        detail: { action },
+      })
+    );
   };
 
   return (
     <>
-      <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "20px" }}>Step 2: Selettori CSS</div>
-
-      <div className="code-explanation">
+      <div>
+        <div className="code-explanation">
         <strong>Spiegazione:</strong> {codeSnippets[2].explanation}
       </div>
-
-      <div>
         <div className="code-section-title">HTML</div>
         <div className="interactive-code-block">
           <div className="interactive-code-content">
             {step2HtmlLines.map((line, index) => {
               const lineNumber = index + 1;
-              const isActive = activeAction && htmlTargets[activeAction]?.includes(lineNumber);
+              const isActive = htmlTargets[activeAction]?.includes(lineNumber);
+
+              let action = null;
+              if ([4].includes(lineNumber)) action = "id";
+              if ([5].includes(lineNumber)) action = "class";
+              if ([7, 8, 9].includes(lineNumber)) action = "name";
 
               return (
-                <div
+                <button
                   key={index}
                   className={`interactive-code-line static-code-line ${
                     isActive ? "interactive-code-line-active" : ""
                   }`}
+                  onClick={() => trigger(action)}
                 >
                   <span className="interactive-code-number">{lineNumber}</span>
                   <span className="interactive-code-text">{line}</span>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -411,16 +424,16 @@ function InteractiveStep2Code() {
           <div className="interactive-code-content">
             {step2JsLines.map((line, index) => {
               const lineNumber = index + 1;
-              const isActive = activeAction && actionLines[activeAction]?.includes(lineNumber);
+              const isActive = actionLines[activeAction]?.includes(lineNumber);
 
               let action = null;
-              if (lineNumber === 3) action = "id";
-              else if (lineNumber === 4) action = "class";
-              else if ([5, 11, 12, 14, 15, 16].includes(lineNumber)) action = "name";
-              else if (lineNumber === 8) action = "innerHTML";
-              else if (lineNumber === 19) action = "alert";
+              if ([3].includes(lineNumber)) action = "id";
+              if ([4].includes(lineNumber)) action = "class";
+              if ([5, 11, 12, 14, 15, 16].includes(lineNumber)) action = "name";
+              if ([8].includes(lineNumber)) action = "innerHTML";
+              if ([19].includes(lineNumber)) action = "alert";
 
-              return action ? (
+              return (
                 <button
                   key={index}
                   className={`interactive-code-line ${
@@ -431,24 +444,15 @@ function InteractiveStep2Code() {
                   <span className="interactive-code-number">{lineNumber}</span>
                   <span className="interactive-code-text">{line}</span>
                 </button>
-              ) : (
-                <div
-                  key={index}
-                  className={`interactive-code-line static-code-line ${
-                    isActive ? "interactive-code-line-active" : ""
-                  }`}
-                >
-                  <span className="interactive-code-number">{lineNumber}</span>
-                  <span className="interactive-code-text">{line}</span>
-                </div>
               );
             })}
           </div>
         </div>
-      </div>
+      </div>      
     </>
   );
 }
+
 
 export default function SidebarCode({ step }) {
   const current = useMemo(() => codeSnippets[step], [step]);

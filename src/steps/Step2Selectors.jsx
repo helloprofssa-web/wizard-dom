@@ -1,38 +1,80 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../App.css";
+import "../Selector.css";
 
 const actionMap = {
   id: {
     title: "getElementById",
-    jsLines: [2],
     htmlTargets: ["title"],
     explanation:
-      "getElementById seleziona un solo elemento tramite il suo id.",
+      "getElementById seleziona un solo elemento tramite il suo id. Si usa quando vogliamo individuare un elemento preciso della pagina.",
   },
+
   class: {
     title: "getElementsByClassName",
-    jsLines: [3],
     htmlTargets: ["message"],
     explanation:
-      "getElementsByClassName seleziona tutti gli elementi con una certa classe.",
+      "getElementsByClassName seleziona tutti gli elementi che condividono la stessa classe. Il risultato è una collezione di elementi.",
   },
+
   name: {
     title: "getElementsByName",
-    jsLines: [4, 10, 11, 13, 14, 15],
     htmlTargets: ["email1", "email2", "email3"],
     explanation:
-      "getElementsByName restituisce una collezione di elementi con lo stesso attributo name.",
+      "getElementsByName restituisce una collezione di elementi con lo stesso attributo name. In questo esempio i tre input funzionano come un piccolo vettore.",
   },
+
   innerHTML: {
     title: "innerHTML",
-    jsLines: [7],
     htmlTargets: ["title"],
-    explanation:
-      "innerHTML modifica il contenuto interno di un elemento.",
+    explanation: (
+      <>
+        <p>
+          <strong>innerHTML</strong> è una proprietà che permette di leggere o
+          modificare il contenuto interno di un elemento HTML.
+        </p>
+
+        <div className="code-inline">
+          titolo.innerHTML = "Titolo modificato con innerHTML";
+        </div>
+
+        <p>
+          Questo sostituisce completamente il contenuto del tag{" "}
+          <code>&lt;h1&gt;</code>.
+        </p>
+
+        <p>
+          <strong>Differenza con textContent:</strong>
+        </p>
+
+        <div className="code-compare">
+          <div className="code-compare-box">
+            <div className="code-compare-title">innerHTML</div>
+            <div className="code-inline">
+              titolo.innerHTML è "&lt;strong&gt;Primo&lt;/strong&gt; Titolo della nostra pagina";            </div>
+            <p>Interpreta HTML → il testo diventa formattato.</p>
+          </div>
+
+          <div className="code-compare-box">
+            <div className="code-compare-title">textContent</div>
+            <div className="code-inline">
+              titolo.textContent è "Primo Titolo della nostra pagina";
+            </div>
+            <p>Mostra solo testo → i tag NON vengono interpretati.</p>
+          </div>
+        </div>
+
+        <p>
+          ⚠️ <strong>Attenzione:</strong> innerHTML sostituisce tutto il contenuto
+          ed interpreta eventuale HTML.
+          <br />Se volessi aggiungere del testo al contenuto esistente, dovresti fare: <code>titolo.innerHTML += " Nuovo testo"</code>.
+        </p>
+      </>
+    ),
   },
+
   alert: {
     title: "alert",
-    jsLines: [18],
     htmlTargets: [],
     explanation:
       "alert mostra una finestra di messaggio immediata.",
@@ -40,51 +82,98 @@ const actionMap = {
 };
 
 export default function Step2Selectors() {
-  const [activeAction, setActiveAction] = useState("id");
-  const [titleText, setTitleText] = useState("Titolo iniziale");
-  const [showFakeAlert, setShowFakeAlert] = useState(false);
+  const [activeAction, setActiveAction] = useState(null);
+  const [titleText, setTitleText] = useState("Titolo iniziale2");
+  const [animateTitle, setAnimateTitle] = useState(false);
   const [emails, setEmails] = useState([
     "studente1@example.com",
     "studente2@example.com",
     "studente3@example.com",
   ]);
 
-  const current = useMemo(() => actionMap[activeAction], [activeAction]);
+  const current = useMemo(
+    () => actionMap[activeAction] || { title: "", htmlTargets: [], explanation: "" },
+    [activeAction]
+  );
 
-  function triggerAction(action) {
+  useEffect(() => {
+    const handler = (event) => {
+      applyAction(event.detail?.action);
+    };
+
+    window.addEventListener("step2-highlight", handler);
+    return () => window.removeEventListener("step2-highlight", handler);
+  }, []);
+
+  function applyAction(action) {
+    if (!action) return;
+
     setActiveAction(action);
-    setShowFakeAlert(false);
-
-    if (action === "id") {
-      setTitleText("Titolo iniziale");
-    }
+    setAnimateTitle(false);
 
     if (action === "innerHTML") {
       setTitleText("Titolo modificato con innerHTML");
+      setAnimateTitle(true);
+
+      setTimeout(() => {
+        setAnimateTitle(false);
+      }, 900);
+    } else {
+      setTitleText("Titolo iniziale");
     }
 
     if (action === "alert") {
-      setShowFakeAlert(true);
+      alert("Questo è un esempio di alert.");
     }
+    if (action === "name") {
+      const output = [];
+
+      output.push(`Numero di campi email: ${emails.length}`);
+      output.push(`Primo elemento: ${emails[0]}`);
+
+      for (let i = 0; i < emails.length; i++) {
+        output.push(`Elemento ${i} = ${emails[i]}`);
+      }
+
+      setConsoleOutput(output);
+    } else {
+      setConsoleOutput([]);
+    }
+  }
+
+  function triggerAction(action) {
+    applyAction(action);
+
+    window.dispatchEvent(
+      new CustomEvent("step2-highlight", {
+        detail: { action },
+      })
+    );
   }
 
   function isHtmlActive(target) {
     return current.htmlTargets.includes(target);
   }
 
+  function isButtonActive(action) {
+    return activeAction === action;
+  }
+
   return (
     <div className="page-content">
       <div className="panel">
-        <div className="panel-header">Step 2: Selettori CSS</div>
+        <div className="panel-header">Step 2: selettori e modifiche del DOM</div>
         <div className="panel-body">
           <p>
-            Qui vediamo una vera pagina web: l'HTML definisce gli elementi, mentre JavaScript li seleziona e li modifica. 
-            <ul className="function-list">
-              <li><i>getElementById</i>: restituisce un solo elemento;</li>
-              <li><i>getElementsByClassName</i>: restituiscono una collezione di elementi caratterizzati dallo stesso attributo className;</li>
-              <li><i>getElementsByName</i>: restituiscono una collezione di elementi caratterizzati dallo stesso attributo name;</li>
-            </ul>
+            Qui vediamo una vera pagina web: l'HTML definisce gli elementi,
+            mentre JavaScript li seleziona e li modifica.
           </p>
+
+          <ul className="function-list">
+            <li><i>getElementById</i>: un elemento</li>
+            <li><i>getElementsByClassName</i>: più elementi</li>
+            <li><i>getElementsByName</i>: collezione</li>
+          </ul>
         </div>
       </div>
 
@@ -92,32 +181,30 @@ export default function Step2Selectors() {
         <div className="panel-header">Selettori disponibili</div>
         <div className="panel-body">
           <div className="button-row">
-            <button className="small-btn" onClick={() => triggerAction("id")}>
-              getElementById
-            </button>
-
-            <button
-              className="small-btn"
-              onClick={() => triggerAction("class")}
-            >
-              getElementsByClassName
-            </button>
-
-            <button className="small-btn" onClick={() => triggerAction("name")}>
-              getElementsByName
-            </button>
-
-            <button
-              className="small-btn"
-              onClick={() => triggerAction("innerHTML")}
-            >
-              innerHTML
-            </button>
-
-            <button className="small-btn" onClick={() => triggerAction("alert")}>
-              alert
-            </button>
+            {["id", "class", "name", "innerHTML", "alert"].map((action) => (
+              <button
+                key={action}
+                className={`small-btn ${isButtonActive(action) ? "small-btn-active" : ""}`}
+                onClick={() => triggerAction(action)}
+              >
+                {actionMap[action].title}
+              </button>
+            ))}
           </div>
+        </div>
+      </div>
+
+      <div className="panel">
+        <div className="panel-header">Cosa succede</div>
+        <div className="panel-body">
+          {activeAction ? (
+            <div className="explanation-block">
+              <strong>{current.title}</strong>
+              <div style={{ marginTop: "8px" }}>{current.explanation}</div>
+            </div>
+          ) : (
+            <p>Clicca un pulsante per vedere il funzionamento.</p>
+          )}
         </div>
       </div>
 
@@ -125,15 +212,14 @@ export default function Step2Selectors() {
         <div className="panel-header">Pagina di esempio</div>
         <div className="panel-body">
           <div className="demo-card">
-            <h2 className={isHtmlActive("title") ? "hl-blue" : ""}>
+            <h2
+              className={`${isHtmlActive("title") ? "hl-blue" : "step2-title"} ${animateTitle ? "title-flash" : ""
+                }`}
+            >
               {titleText}
             </h2>
 
-            <p
-              className={
-                isHtmlActive("message") ? "hl-yellow block" : "block"
-              }
-            >
+            <p className={isHtmlActive("message") ? "hl-yellow block" : "block"}>
               Messaggio con classe <code>messaggio</code>
             </p>
 
@@ -156,37 +242,18 @@ export default function Step2Selectors() {
             </div>
 
             {activeAction === "name" && (
-              <div className="vector-box">
-                <p>
-                  <strong>Simulazione collezione restituita da getElementsByName</strong>
-                </p>
-                <p>length: {emails.length}</p>
-                <p>email[0]: {emails[0]}</p>
-                <p>email[1]: {emails[1]}</p>
-                <p>email[2]: {emails[2]}</p>
-              </div>
-            )}
-
-            {showFakeAlert && (
-              <div className="fake-alert">
-                Questo è un esempio di alert.
-              </div>
-            )}
-          </div>
+  <div className="fake-console">
+    <div className="console-header">Console</div>
+    <div className="console-body">
+      {consoleOutput.map((line, index) => (
+        <div key={index} className="console-line">
+          {line}
         </div>
-      </div>
-
-      <div className="panel">
-        <div className="panel-header">Spiegazione</div>
-        <div className="panel-body">
-          <p>
-            <strong>{current.title}</strong>: {current.explanation}
-          </p>
-          <p>
-            In questa simulazione vengono evidenziati:
-            la riga JavaScript coinvolta, l’elemento HTML corrispondente e,
-            quando serve, l’effetto visibile sulla pagina.
-          </p>
+      ))}
+    </div>
+  </div>
+)}
+          </div>
         </div>
       </div>
     </div>
