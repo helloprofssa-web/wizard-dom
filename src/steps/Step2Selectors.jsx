@@ -51,23 +51,27 @@ const actionMap = {
           <div className="code-compare-box">
             <div className="code-compare-title">innerHTML</div>
             <div className="code-inline">
-              titolo.innerHTML è "&lt;strong&gt;Primo&lt;/strong&gt; Titolo della nostra pagina";            </div>
-            <p>Interpreta HTML → il testo diventa formattato.</p>
+              titolo.innerHTML = "&lt;strong&gt;Primo&lt;/strong&gt; Titolo della
+              nostra pagina";
+            </div>
+            <p>Interpreta HTML: il testo diventa formattato.</p>
           </div>
 
           <div className="code-compare-box">
             <div className="code-compare-title">textContent</div>
             <div className="code-inline">
-              titolo.textContent è "Primo Titolo della nostra pagina";
+              titolo.textContent = "Primo Titolo della nostra pagina";
             </div>
-            <p>Mostra solo testo → i tag NON vengono interpretati.</p>
+            <p>Mostra solo testo: i tag NON vengono interpretati.</p>
           </div>
         </div>
 
         <p>
-          ⚠️ <strong>Attenzione:</strong> innerHTML sostituisce tutto il contenuto
+          <strong>Attenzione:</strong> innerHTML sostituisce tutto il contenuto
           ed interpreta eventuale HTML.
-          <br />Se volessi aggiungere del testo al contenuto esistente, dovresti fare: <code>titolo.innerHTML += " Nuovo testo"</code>.
+          <br />
+          Se volessi aggiungere del testo al contenuto esistente, dovresti fare:{" "}
+          <code>titolo.innerHTML += " Nuovo testo"</code>.
         </p>
       </>
     ),
@@ -76,15 +80,15 @@ const actionMap = {
   alert: {
     title: "alert",
     htmlTargets: [],
-    explanation:
-      "alert mostra una finestra di messaggio immediata.",
+    explanation: "alert mostra una finestra di messaggio immediata.",
   },
 };
 
 export default function Step2Selectors() {
   const [activeAction, setActiveAction] = useState(null);
-  const [titleText, setTitleText] = useState("Titolo iniziale2");
+  const [titleText, setTitleText] = useState("Titolo iniziale");
   const [animateTitle, setAnimateTitle] = useState(false);
+  const [consoleOutput, setConsoleOutput] = useState([]);
   const [emails, setEmails] = useState([
     "studente1@example.com",
     "studente2@example.com",
@@ -92,7 +96,12 @@ export default function Step2Selectors() {
   ]);
 
   const current = useMemo(
-    () => actionMap[activeAction] || { title: "", htmlTargets: [], explanation: "" },
+    () =>
+      actionMap[activeAction] || {
+        title: "",
+        htmlTargets: [],
+        explanation: "",
+      },
     [activeAction]
   );
 
@@ -103,13 +112,26 @@ export default function Step2Selectors() {
 
     window.addEventListener("step2-highlight", handler);
     return () => window.removeEventListener("step2-highlight", handler);
-  }, []);
+  }, [emails]);
+
+  function buildConsoleOutput(currentEmails) {
+    const output = [];
+    output.push(`Numero di campi email: ${currentEmails.length}`);
+    output.push(`Primo elemento: ${currentEmails[0]}`);
+
+    for (let i = 0; i < currentEmails.length; i++) {
+      output.push(`Elemento ${i} = ${currentEmails[i]}`);
+    }
+
+    return output;
+  }
 
   function applyAction(action) {
     if (!action) return;
 
     setActiveAction(action);
     setAnimateTitle(false);
+    setConsoleOutput([]);
 
     if (action === "innerHTML") {
       setTitleText("Titolo modificato con innerHTML");
@@ -125,25 +147,13 @@ export default function Step2Selectors() {
     if (action === "alert") {
       alert("Questo è un esempio di alert.");
     }
+
     if (action === "name") {
-      const output = [];
-
-      output.push(`Numero di campi email: ${emails.length}`);
-      output.push(`Primo elemento: ${emails[0]}`);
-
-      for (let i = 0; i < emails.length; i++) {
-        output.push(`Elemento ${i} = ${emails[i]}`);
-      }
-
-      setConsoleOutput(output);
-    } else {
-      setConsoleOutput([]);
+      setConsoleOutput(buildConsoleOutput(emails));
     }
   }
 
   function triggerAction(action) {
-    applyAction(action);
-
     window.dispatchEvent(
       new CustomEvent("step2-highlight", {
         detail: { action },
@@ -170,9 +180,15 @@ export default function Step2Selectors() {
           </p>
 
           <ul className="function-list">
-            <li><i>getElementById</i>: un elemento</li>
-            <li><i>getElementsByClassName</i>: più elementi</li>
-            <li><i>getElementsByName</i>: collezione</li>
+            <li>
+              <i>getElementById</i>: un elemento
+            </li>
+            <li>
+              <i>getElementsByClassName</i>: più elementi
+            </li>
+            <li>
+              <i>getElementsByName</i>: collezione
+            </li>
           </ul>
         </div>
       </div>
@@ -184,7 +200,9 @@ export default function Step2Selectors() {
             {["id", "class", "name", "innerHTML", "alert"].map((action) => (
               <button
                 key={action}
-                className={`small-btn ${isButtonActive(action) ? "small-btn-active" : ""}`}
+                className={`small-btn ${
+                  isButtonActive(action) ? "small-btn-active" : ""
+                }`}
                 onClick={() => triggerAction(action)}
               >
                 {actionMap[action].title}
@@ -213,8 +231,9 @@ export default function Step2Selectors() {
         <div className="panel-body">
           <div className="demo-card">
             <h2
-              className={`${isHtmlActive("title") ? "hl-blue" : "step2-title"} ${animateTitle ? "title-flash" : ""
-                }`}
+              className={`${
+                isHtmlActive("title") ? "hl-blue" : "step2-title"
+              } ${animateTitle ? "title-flash" : ""}`}
             >
               {titleText}
             </h2>
@@ -235,6 +254,10 @@ export default function Step2Selectors() {
                       const copy = [...emails];
                       copy[index] = e.target.value;
                       setEmails(copy);
+
+                      if (activeAction === "name") {
+                        setConsoleOutput(buildConsoleOutput(copy));
+                      }
                     }}
                   />
                 );
@@ -242,17 +265,17 @@ export default function Step2Selectors() {
             </div>
 
             {activeAction === "name" && (
-  <div className="fake-console">
-    <div className="console-header">Console</div>
-    <div className="console-body">
-      {consoleOutput.map((line, index) => (
-        <div key={index} className="console-line">
-          {line}
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+              <div className="fake-console">
+                <div className="console-header">Console</div>
+                <div className="console-body">
+                  {consoleOutput.map((line, index) => (
+                    <div key={index} className="console-line">
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
