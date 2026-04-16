@@ -69,30 +69,30 @@ export default function Step1Dom() {
       <div className="dom-org-chart-inner">
       <ul>
         <li>
-          <div className="org-node">html</div>
+          <div className={`org-node ${treeClass("html", selected)}`}>html</div>
           <ul>
             <li>
-              <div className="org-node">body</div>
+              <div className={`org-node ${treeClass("body", selected)}`}>body</div>
               <ul>
                 <li>
-                  <div className="org-node">div#pagina</div>
+                  <div className={`org-node ${treeClass("pagina", selected)}`}>div#pagina</div>
                   <ul>
                     <li>
-                      <div className="org-node">div.sezione</div>
+                      <div className={`org-node ${treeClass("sezione1", selected)}`}>div.sezione</div>
                       <ul>
-                        <li><div className="org-node">h1</div></li>
-                        <li><div className="org-node">p</div></li>
+                        <li><div className={`org-node ${treeClass("h1", selected)}`}>h1</div></li>
+                        <li><div className={`org-node ${treeClass("p", selected)}`}>p</div></li>
                       </ul>
                     </li>
                     <li>
-                      <div className="org-node">div.sezione</div>
+                      <div className={`org-node ${treeClass("sezione2", selected)}`}>div.sezione</div>
                       <ul>
-                        <li><div className="org-node">button</div></li>
+                        <li><div className={`org-node ${treeClass("button", selected)}`}>button</div></li>
                         <li>
-                          <div className="org-node">ul</div>
+                          <div className={`org-node ${treeClass("ul", selected)}`}>ul</div>
                           <ul>
-                            <li><div className="org-node">li</div></li>
-                            <li><div className="org-node">li</div></li>
+                            <li><div className={`org-node ${treeClass("li1", selected)}`}>li</div></li>
+                            <li><div className={`org-node ${treeClass("li2", selected)}`}>li</div></li>
                           </ul>
                         </li>
                       </ul>

@@ -75,7 +75,21 @@ export default function Step2Selectors() {
   return (
     <div className="page-content">
       <div className="panel">
-        <div className="panel-header">Pagina di esempio</div>
+        <div className="panel-header">Step 2: Selettori CSS</div>
+        <div className="panel-body">
+          <p>
+            Qui vediamo una vera pagina web: l'HTML definisce gli elementi, mentre JavaScript li seleziona e li modifica. 
+            <ul className="function-list">
+              <li><i>getElementById</i>: restituisce un solo elemento;</li>
+              <li><i>getElementsByClassName</i>: restituiscono una collezione di elementi caratterizzati dallo stesso attributo className;</li>
+              <li><i>getElementsByName</i>: restituiscono una collezione di elementi caratterizzati dallo stesso attributo name;</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+
+      <div className="panel">
+        <div className="panel-header">Selettori disponibili</div>
         <div className="panel-body">
           <div className="button-row">
             <button className="small-btn" onClick={() => triggerAction("id")}>
@@ -104,7 +118,12 @@ export default function Step2Selectors() {
               alert
             </button>
           </div>
+        </div>
+      </div>
 
+      <div className="panel">
+        <div className="panel-header">Pagina di esempio</div>
+        <div className="panel-body">
           <div className="demo-card">
             <h2 className={isHtmlActive("title") ? "hl-blue" : ""}>
               {titleText}
