@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
+import "../DomTree.css";
 
 function isActive(target, current) {
   if (!current) return false;
@@ -62,23 +63,58 @@ export default function Step1Dom() {
       </div>
 
       <div className="panel">
-        <div className="panel-header">Lettura come albero DOM</div>
-        <div className="panel-body">
-          <pre className="tree-block">{String.raw`html
-└─ body
-   └─ div#pagina
-      ├─ div.sezione
-      │  ├─ h1
-      │  └─ p
-      └─ div.sezione
-         ├─ button
-         └─ ul
-            ├─ li
-            └─ li`}</pre>
+  <div className="panel-header">Lettura come albero DOM</div>
+  <div className="panel-body">
+    <div className="dom-org-chart">
+      <div className="dom-org-chart-inner">
+      <ul>
+        <li>
+          <div className="org-node">html</div>
+          <ul>
+            <li>
+              <div className="org-node">body</div>
+              <ul>
+                <li>
+                  <div className="org-node">div#pagina</div>
+                  <ul>
+                    <li>
+                      <div className="org-node">div.sezione</div>
+                      <ul>
+                        <li><div className="org-node">h1</div></li>
+                        <li><div className="org-node">p</div></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <div className="org-node">div.sezione</div>
+                      <ul>
+                        <li><div className="org-node">button</div></li>
+                        <li>
+                          <div className="org-node">ul</div>
+                          <ul>
+                            <li><div className="org-node">li</div></li>
+                            <li><div className="org-node">li</div></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+</div>
+    <div className="tree-legend">
+      <p className="panel-text">
+        Questa rappresentazione mostra il DOM come una gerarchia di nodi:
+        ogni elemento può contenere altri elementi figli.
+      </p>
+    </div>
+  </div>
+</div>
 
-          
-        </div>
-      </div>
     </div>
   );
 }

@@ -159,7 +159,6 @@ export default function SidebarCode({ step }) {
   if (step === 1) {
     return (
       <div className="panel">
-        <div className="panel-header">Codice spiegato</div>
         <div className="panel-body">
           <div className="code-columns">
             <InteractiveStep1Code />

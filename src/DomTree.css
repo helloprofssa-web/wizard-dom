@@ -1,0 +1,98 @@
+.dom-org-chart {
+  width: 100%;
+  padding: 12px 0 4px;
+  overflow-x: auto;
+}
+
+.dom-org-chart-inner {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.dom-org-chart ul {
+  position: relative;
+  padding-top: 20px;
+  margin: 0;
+  padding-left: 0;
+  white-space: nowrap;
+}
+
+.dom-org-chart li {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  list-style-type: none;
+  padding: 20px 6px 0 6px;
+  vertical-align: top;
+}
+
+/* linee orizzontali tra fratelli */
+.dom-org-chart li::before,
+.dom-org-chart li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 20px;
+  border-top: 2px solid #cbd5e1;
+}
+
+.dom-org-chart li::after {
+  left: 50%;
+  right: auto;
+  border-left: 2px solid #cbd5e1;
+}
+
+/* se il nodo è unico figlio, nessuna linea laterale */
+.dom-org-chart li:only-child::before,
+.dom-org-chart li:only-child::after {
+  display: none;
+}
+
+.dom-org-chart li:only-child {
+  padding-top: 0;
+}
+
+/* elimina la linea sinistra del primo e destra dell’ultimo */
+.dom-org-chart li:first-child::before,
+.dom-org-chart li:last-child::after {
+  border: 0 none;
+}
+
+/* angoli */
+.dom-org-chart li:last-child::before {
+  border-right: 2px solid #cbd5e1;
+  border-radius: 0 8px 0 0;
+}
+
+.dom-org-chart li:first-child::after {
+  border-radius: 8px 0 0 0;
+}
+
+/* linea verticale dal genitore ai figli */
+.dom-org-chart ul ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 20px;
+  border-left: 2px solid #cbd5e1;
+}
+
+/* box del nodo */
+.org-node {
+  display: inline-block;
+  min-width: 70px;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  color: #0f172a;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}

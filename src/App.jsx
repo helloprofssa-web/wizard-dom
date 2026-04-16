@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Code2,
   TreePine,
   MousePointerClick,
   FormInput,
@@ -15,12 +14,13 @@ import Step1Dom from "./steps/Step1Dom";
 import Step2Selectors from "./steps/Step2Selectors";
 import Step3Events from "./steps/Step3Events";
 import Step4Exercises from "./steps/Step4Exercises";
+import Footer from "./components/Footer";
 
 const stepMeta = [
   {
     id: 1,
     short: "DOM",
-    title: "Il DOM",
+    title: "Il DOM - Document Object Model",
     subtitle: "Passaggio 1",
     description:
       "La pagina HTML viene rappresentata dal browser come un albero di nodi.",
@@ -55,17 +55,7 @@ const stepMeta = [
   },
 ];
 
-function StepBadge({ active, children }) {
-  return (
-    <div className={`step-badge ${active ? "step-badge-active" : ""}`}>
-      {children}
-    </div>
-  );
-}
-
-function TopPanel({ step }) {
-  const current = stepMeta[step - 1];
-
+function TopPanel() {
   return (
     <div className="top-panel">
       <div>
@@ -75,10 +65,6 @@ function TopPanel({ step }) {
           dentro una pagina HTML: DOM, selezione degli elementi, script ed
           eventi.
         </p>
-      </div>
-
-      <div className="step-badge">
-        Step {current.id} di {stepMeta.length}
       </div>
     </div>
   );
@@ -91,43 +77,14 @@ function StepHeader({ step }) {
   return (
     <div className="panel">
       <div className="panel-body">
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-          }}
-        >
-          <div
-            style={{
-              background: "#eff6ff",
-              border: "1px solid #bfdbfe",
-              borderRadius: "16px",
-              padding: "12px",
-              display: "inline-flex",
-            }}
-          >
+        <div className="step-header-wrap">
+          <div className="step-header-icon">
             <Icon size={24} color="#1d4ed8" />
           </div>
 
-          <div>
-            <p
-              style={{
-                margin: 0,
-                color: "#1d4ed8",
-                fontWeight: 700,
-                fontSize: "0.95rem",
-              }}
-            >
-              Step {current.id}
-            </p>
-
-            <h2 style={{ margin: "8px 0 8px" }}>{current.title}</h2>
-
-            <p style={{ margin: 0, color: "#475569", lineHeight: 1.6 }}>
-              {current.description}
-            </p>
+          <div className="step-header-content">
+            <h2 className="step-heading-title">{current.title}</h2>
+            <p className="step-heading-text">{current.description}</p>
           </div>
         </div>
       </div>
@@ -148,7 +105,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <TopPanel step={step} />
+      <TopPanel />
 
       <div className="progress-wrap">
         <div className="progress-bar" style={{ width: `${progress}%` }} />
@@ -217,6 +174,7 @@ export default function App() {
           </span>
         </button>
       </div>
+       <Footer />
     </div>
   );
 }
