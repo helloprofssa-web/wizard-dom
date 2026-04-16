@@ -6,6 +6,7 @@ import {
   MousePointerClick,
   FormInput,
   PencilRuler,
+  Code,
 } from "lucide-react";
 import "./App.css";
 
@@ -14,6 +15,7 @@ import Step1Dom from "./steps/Step1Dom";
 import Step2Selectors from "./steps/Step2Selectors";
 import Step3Events from "./steps/Step3Events";
 import Step4Exercises from "./steps/Step4Exercises";
+import Step5DynamicHtml from "./steps/Step5DynamicHtml";
 import Footer from "./components/Footer";
 
 const stepMeta = [
@@ -53,6 +55,15 @@ const stepMeta = [
       "Attività finali da svolgere con gli alunni in laboratorio.",
     icon: PencilRuler,
   },
+  {
+    id: 5,
+    short: "Dinamico",
+    title: "HTML Dinamico",
+    subtitle: "Passaggio 5",
+    description:
+      "Scrivi il tuo codice HTML e esplora il DOM in tempo reale.",
+    icon: Code,
+  },
 ];
 
 function TopPanel() {
@@ -61,9 +72,8 @@ function TopPanel() {
       <div>
         <h1>JavaScript e DOM</h1>
         <p>
-          Un percorso guidato in 4 step per mostrare come JavaScript lavora
-          dentro una pagina HTML: DOM, selezione degli elementi, script ed
-          eventi.
+          Un percorso guidato in 5 step per mostrare come JavaScript lavora
+          dentro una pagina HTML: DOM, selezione degli elementi, script, eventi e HTML dinamico.
         </p>
       </div>
     </div>
@@ -96,7 +106,8 @@ function renderStep(step) {
   if (step === 1) return <Step1Dom />;
   if (step === 2) return <Step2Selectors />;
   if (step === 3) return <Step3Events />;
-  return <Step4Exercises />;
+  if (step === 4) return <Step4Exercises />;
+  return <Step5DynamicHtml />;
 }
 
 export default function App() {

@@ -1,31 +1,76 @@
 import React, { useMemo, useState } from "react";
 import "../App.css";
 
+const actionMap = {
+  id: {
+    title: "getElementById",
+    jsLines: [2],
+    htmlTargets: ["title"],
+    explanation:
+      "getElementById seleziona un solo elemento tramite il suo id.",
+  },
+  class: {
+    title: "getElementsByClassName",
+    jsLines: [3],
+    htmlTargets: ["message"],
+    explanation:
+      "getElementsByClassName seleziona tutti gli elementi con una certa classe.",
+  },
+  name: {
+    title: "getElementsByName",
+    jsLines: [4, 10, 11, 13, 14, 15],
+    htmlTargets: ["email1", "email2", "email3"],
+    explanation:
+      "getElementsByName restituisce una collezione di elementi con lo stesso attributo name.",
+  },
+  innerHTML: {
+    title: "innerHTML",
+    jsLines: [7],
+    htmlTargets: ["title"],
+    explanation:
+      "innerHTML modifica il contenuto interno di un elemento.",
+  },
+  alert: {
+    title: "alert",
+    jsLines: [18],
+    htmlTargets: [],
+    explanation:
+      "alert mostra una finestra di messaggio immediata.",
+  },
+};
+
 export default function Step2Selectors() {
-  const [highlight, setHighlight] = useState("id");
+  const [activeAction, setActiveAction] = useState("id");
   const [titleText, setTitleText] = useState("Titolo iniziale");
+  const [showFakeAlert, setShowFakeAlert] = useState(false);
   const [emails, setEmails] = useState([
     "studente1@example.com",
     "studente2@example.com",
     "studente3@example.com",
   ]);
 
-  const message = useMemo(() => {
-    switch (highlight) {
-      case "id":
-        return "getElementById seleziona un solo elemento tramite il suo id.";
-      case "class":
-        return "getElementsByClassName seleziona tutti gli elementi con una certa classe.";
-      case "name":
-        return "getElementsByName restituisce più elementi: possiamo trattarli come una collezione simile a un vettore.";
-      case "innerHTML":
-        return "innerHTML cambia il contenuto interno di un elemento.";
-      case "alert":
-        return "alert mostra una finestra di messaggio immediata.";
-      default:
-        return "Clicca un pulsante per vedere l'effetto.";
+  const current = useMemo(() => actionMap[activeAction], [activeAction]);
+
+  function triggerAction(action) {
+    setActiveAction(action);
+    setShowFakeAlert(false);
+
+    if (action === "id") {
+      setTitleText("Titolo iniziale");
     }
-  }, [highlight]);
+
+    if (action === "innerHTML") {
+      setTitleText("Titolo modificato con innerHTML");
+    }
+
+    if (action === "alert") {
+      setShowFakeAlert(true);
+    }
+  }
+
+  function isHtmlActive(target) {
+    return current.htmlTargets.includes(target);
+  }
 
   return (
     <div className="page-content">
@@ -33,87 +78,79 @@ export default function Step2Selectors() {
         <div className="panel-header">Pagina di esempio</div>
         <div className="panel-body">
           <div className="button-row">
-            <button
-              className="small-btn"
-              onClick={() => {
-                setHighlight("id");
-                setTitleText("Titolo iniziale");
-              }}
-            >
+            <button className="small-btn" onClick={() => triggerAction("id")}>
               getElementById
             </button>
 
             <button
               className="small-btn"
-              onClick={() => setHighlight("class")}
+              onClick={() => triggerAction("class")}
             >
               getElementsByClassName
             </button>
 
-            <button
-              className="small-btn"
-              onClick={() => setHighlight("name")}
-            >
+            <button className="small-btn" onClick={() => triggerAction("name")}>
               getElementsByName
             </button>
 
             <button
               className="small-btn"
-              onClick={() => {
-                setHighlight("innerHTML");
-                setTitleText("Titolo modificato con innerHTML");
-              }}
+              onClick={() => triggerAction("innerHTML")}
             >
               innerHTML
             </button>
 
-            <button
-              className="small-btn"
-              onClick={() => {
-                setHighlight("alert");
-                window.alert("Questo è un esempio di alert.");
-              }}
-            >
+            <button className="small-btn" onClick={() => triggerAction("alert")}>
               alert
             </button>
           </div>
 
           <div className="demo-card">
-            <h2
-              className={
-                highlight === "id" || highlight === "innerHTML" ? "hl-blue" : ""
-              }
-            >
+            <h2 className={isHtmlActive("title") ? "hl-blue" : ""}>
               {titleText}
             </h2>
 
-            <p className={highlight === "class" ? "hl-yellow block" : "block"}>
+            <p
+              className={
+                isHtmlActive("message") ? "hl-yellow block" : "block"
+              }
+            >
               Messaggio con classe <code>messaggio</code>
             </p>
 
-            {emails.map((email, index) => (
-              <input
-                key={index}
-                className={highlight === "name" ? "hl-green input" : "input"}
-                value={email}
-                onChange={(e) => {
-                  const copy = [...emails];
-                  copy[index] = e.target.value;
-                  setEmails(copy);
-                }}
-                style={{ marginBottom: "8px" }}
-              />
-            ))}
+            <div className="step2-inputs">
+              {emails.map((email, index) => {
+                const target = `email${index + 1}`;
+                return (
+                  <input
+                    key={index}
+                    className={isHtmlActive(target) ? "hl-green input" : "input"}
+                    value={email}
+                    onChange={(e) => {
+                      const copy = [...emails];
+                      copy[index] = e.target.value;
+                      setEmails(copy);
+                    }}
+                  />
+                );
+              })}
+            </div>
 
-            {highlight === "name" && (
+            {activeAction === "name" && (
               <div className="vector-box">
                 <p>
-                  <strong>Simulazione vettore</strong>
+                  <strong>Simulazione collezione restituita da getElementsByName</strong>
                 </p>
                 <p>length: {emails.length}</p>
-                <p>elemento [0]: {emails[0] || "(vuoto)"}</p>
-                <p>elemento [1]: {emails[1] || "(vuoto)"}</p>
-                <p>elemento [2]: {emails[2] || "(vuoto)"}</p>
+                <p>email[0]: {emails[0]}</p>
+                <p>email[1]: {emails[1]}</p>
+                <p>email[2]: {emails[2]}</p>
+              </div>
+            )}
+
+            {showFakeAlert && (
+              <div className="fake-alert">
+                Questo è un esempio di alert.
               </div>
             )}
           </div>
@@ -123,7 +160,14 @@ export default function Step2Selectors() {
       <div className="panel">
         <div className="panel-header">Spiegazione</div>
         <div className="panel-body">
-          <p>{message}</p>
+          <p>
+            <strong>{current.title}</strong>: {current.explanation}
+          </p>
+          <p>
+            In questa simulazione vengono evidenziati:
+            la riga JavaScript coinvolta, l’elemento HTML corrispondente e,
+            quando serve, l’effetto visibile sulla pagina.
+          </p>
         </div>
       </div>
     </div>
