@@ -1,197 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
-
 import "../App.css";
-
-const step1Lines = [
-  { id: "l1", text: "<!DOCTYPE html>", keyName: null },
-  { id: "l2", text: "<html>", keyName: "html" },
-  { id: "l3", text: "  <body>", keyName: "body" },
-  { id: "l4", text: '    <div id="pagina">', keyName: "pagina" },
-  { id: "l5", text: '      <div class="sezione">', keyName: "sezione1" },
-  { id: "l6", text: "        <h1>Titolo della pagina</h1>", keyName: "h1" },
-  {
-    id: "l7",
-    text: "        <p>Questo è un paragrafo dentro il primo div.</p>",
-    keyName: "p",
-  },
-  { id: "l8", text: "      </div>", keyName: "sezione1" },
-  { id: "l9", text: '      <div class="sezione">', keyName: "sezione2" },
-  { id: "l10", text: "        <button>Pulsante</button>", keyName: "button" },
-  { id: "l11", text: "        <ul>", keyName: "ul" },
-  { id: "l12", text: "          <li>Elemento lista 1</li>", keyName: "li1" },
-  { id: "l13", text: "          <li>Elemento lista 2</li>", keyName: "li2" },
-  { id: "l14", text: "        </ul>", keyName: "ul" },
-  { id: "l15", text: "      </div>", keyName: "sezione2" },
-  { id: "l16", text: "    </div>", keyName: "pagina" },
-  { id: "l17", text: "  </body>", keyName: "body" },
-  { id: "l18", text: "</html>", keyName: "html" },
-];
-
-const step2HtmlLines = [
-  "<!DOCTYPE html>",
-  '<html lang="it">',
-  "  <body>",
-  '    <h1 id="titolo"><span>Primo</span> Titolo Della nostra pagina</h1>',
-  '    <p class="messaggio">Messaggio con classe</p>',
-  "",
-  '    <input type="email" name="email" value="studente1@example.com" />',
-  '    <input type="email" name="email" value="studente2@example.com" />',
-  '    <input type="email" name="email" value="studente3@example.com" />',
-  "",
-  '    <script src="script.js"></script>',
-  "  </body>",
-  "</html>",
-];
-
-const step2JsLines = [
-  "// Selezione degli elementi",
-  "",
-  'const titolo = document.getElementById("titolo");',
-  'const messaggi = document.getElementsByClassName("messaggio");',
-  'const email = document.getElementsByName("email");',
-  "",
-  "// Modifica del contenuto",
-  'titolo.innerHTML = "Titolo modificato con innerHTML";',
-  "",
-  "// Uso della collezione restituita da getElementsByName",
-  'console.log("Numero di campi email:", email.length);',
-  'console.log("Primo elemento:", email[0].value);',
-  "",
-  "for (let i = 0; i < email.length; i++) {",
-  '  console.log("Elemento", i, "=", email[i].value);',
-  "}",
-  "",
-  "// Finestra di messaggio",
-  'alert("Questo è un esempio di alert.");',
-];
-
-const codeSnippets = {
-  1: {
-    explanation:
-      "Clicca una riga del codice: nello step 1 si evidenzia l'elemento corrispondente nella pagina e nella lettura del DOM.",
-  },
-
-  2: {
-    html: `<!DOCTYPE html>
-<html lang="it">
-  <body>
-    <h1 id="titolo"><strong>Primo</strong> Titolo Della nostra pagina</h1>
-    <p class="messaggio">Messaggio con classe</p>
-
-    <input type="email" name="email" value="studente1@example.com"/>
-    <input type="email" name="email" value="studente2@example.com"/>
-    <input type="email" name="email" value="studente3@example.com"/>
-
-    <script src="script.js"></script>
-  </body>
-</html>`,
-
-    js: `// Selezione degli elementi
-
-const titolo = document.getElementById("titolo");
-const messaggi = document.getElementsByClassName("messaggio");
-const email = document.getElementsByName("email");
-
-// Modifica del contenuto
-
-titolo.innerHTML = "Titolo modificato con innerHTML";
-
-// Uso della collezione restituita da getElementsByName
-
-console.log("Numero di campi email:", email.length);
-console.log("Primo elemento:", email[0].value);
-
-// Scorrimento della collezione
-
-for (let i = 0; i < email.length; i++) {
-  console.log("Elemento", i, "=", email[i].value);
-}
-
-// Finestra di messaggio
-
-alert("Questo è un esempio di alert.");`,
-
-    explanation:
-      "In questo step esploriamo i principali metodi di selezione degli elementi.\n Vediamo anche come modificare il contenuto con innerHTML e come mostrare un messaggio con alert.",
-  },
-
-  3: {
-    html: `<!DOCTYPE html>
-<html lang="it">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Eventi sui campi input</title>
-  </head>
-  <body>
-    <input id="nome" placeholder="Scrivi il tuo nome" />
-    <button id="saluta">Saluta</button>
-    <p id="output"></p>
-
-    <!-- Includiamo all'interno della pagina uno script JavaScript -->
-    <script src="script.js"></script>
-  </body>
-</html>`,
-
-    js: `const inputNome = document.getElementById("nome");
-const bottone = document.getElementById("saluta");
-const output = document.getElementById("output");
-
-inputNome.addEventListener("focus", function () {
-  output.innerHTML = "Sei entrato nel campo";
-});
-
-inputNome.addEventListener("input", function () {
-  output.innerHTML = "Stai scrivendo: " + inputNome.value;
-});
-
-inputNome.addEventListener("blur", function () {
-  output.innerHTML = "Sei uscito dal campo";
-});
-
-bottone.addEventListener("click", function () {
-  alert("Ciao " + inputNome.value);
-});`,
-
-    explanation:
-      "In questo step HTML definisce gli elementi della pagina, mentre JavaScript collega eventi e comportamenti.",
-  },
-
-  4: {
-    html: `<!-- Nessun nuovo HTML: qui trovi la traccia degli esercizi -->`,
-
-    js: `1. Disegna l'albero DOM della pagina dello step 1.
-2. Aggiungi un id a un paragrafo e modificalo con getElementById.
-3. Crea due elementi con la stessa classe e selezionali.
-4. Crea tre input con lo stesso name e leggili con indice e length.
-5. Crea un input e un bottone che mostrino un alert.
-6. Usa l'evento input per aggiornare un testo nella pagina.`,
-
-    explanation:
-      "Gli esercizi riprendono i concetti visti nei tre step precedenti e li trasformano in attività operative.",
-  },
-
-  5: {
-    html: `<!-- Qui puoi scrivere il tuo HTML personalizzato nell'editor -->`,
-
-    js: `// Esempi di selezione elementi nel tuo HTML:
-//
-// getElementById("id-elemento")
-// getElementsByClassName("nome-classe")
-// getElementsByName("nome-attributo")
-//
-// Prova a scrivere il tuo JavaScript qui!`,
-
-    explanation:
-      "In questo step puoi scrivere il tuo codice HTML e JavaScript personalizzato. Usa l'editor per creare pagine web interattive e sperimenta con il DOM!",
-  },
-};
+import {
+  step1Lines,
+  step2HtmlLines,
+  step2JsLines,
+  step3JsLines,
+  step4HtmlLines,
+  step4JsLines,
+  codeSnippets,
+} from "./sidebarCodeData";
 
 function StaticCodeBlock({ title, code }) {
   const lines = code.split("\n");
 
   return (
     <div>
-      <div className="code-section-title">{title}</div>
+      {title && <div className="code-section-title">{title}</div>}
       <div className="interactive-code-block">
         <div className="interactive-code-content">
           {lines.map((line, index) => (
@@ -206,7 +30,7 @@ function StaticCodeBlock({ title, code }) {
   );
 }
 
-function EditableCodeStep5() {
+function EditableCodeStep6() {
   const [htmlCode, setHtmlCode] = useState(`<!DOCTYPE html>
 <html lang="it">
   <head>
@@ -218,7 +42,6 @@ function EditableCodeStep5() {
       .messaggio { background: #f0f9ff; padding: 10px; border-radius: 8px; }
       input { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
       button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
-      button:hover { background: #2563eb; }
     </style>
   </head>
   <body>
@@ -229,34 +52,41 @@ function EditableCodeStep5() {
   </body>
 </html>`);
 
-  const [jsCode, setJsCode] = useState(`// Esempi di selezione elementi:
-//
-// getElementById("id-elemento")
-// getElementsByClassName("nome-classe")
-// getElementsByName("nome-attributo")
-//
-// Prova a scrivere il tuo JavaScript qui!`);
+  const [jsCode, setJsCode] = useState(codeSnippets[6].js);
 
   const handleHtmlChange = (e) => {
     const newCode = e.target.value;
     setHtmlCode(newCode);
-    window.dispatchEvent(new CustomEvent("step5-html-update", { detail: { html: newCode, js: jsCode } }));
+    window.dispatchEvent(
+      new CustomEvent("step6-html-update", {
+        detail: { html: newCode, js: jsCode },
+      })
+    );
   };
 
   const handleJsChange = (e) => {
     const newCode = e.target.value;
     setJsCode(newCode);
-    window.dispatchEvent(new CustomEvent("step5-html-update", { detail: { html: htmlCode, js: newCode } }));
+    window.dispatchEvent(
+      new CustomEvent("step6-html-update", {
+        detail: { html: htmlCode, js: newCode },
+      })
+    );
   };
 
-  // Inizializza l'evento al mount
-  React.useEffect(() => {
-    window.dispatchEvent(new CustomEvent("step5-html-update", { detail: { html: htmlCode, js: jsCode } }));
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("step6-html-update", {
+        detail: { html: htmlCode, js: jsCode },
+      })
+    );
   }, []);
 
   return (
     <>
-      <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "20px" }}>Step 5: Scrivi il tuo codice</div>
+      <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "20px" }}>
+        Step 7: Scrivi il tuo codice
+      </div>
 
       <div className="code-explanation">
         <strong>Spiegazione:</strong> Modifica l'HTML e JavaScript qui sopra. Le modifiche si riflettono automaticamente nell'anteprima a destra.
@@ -274,7 +104,7 @@ function EditableCodeStep5() {
             fontSize: "0.78rem",
             lineHeight: "1.35",
             resize: "vertical",
-            minHeight: "200px"
+            minHeight: "200px",
           }}
         />
       </div>
@@ -291,7 +121,7 @@ function EditableCodeStep5() {
             fontSize: "0.78rem",
             lineHeight: "1.35",
             resize: "vertical",
-            minHeight: "150px"
+            minHeight: "150px",
           }}
         />
       </div>
@@ -309,17 +139,18 @@ function InteractiveStep1Code() {
       </div>
 
       <div>
-        <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "10px" }}>HTML interattivo</div>
+        <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "10px" }}>
+          HTML interattivo
+        </div>
         <div className="interactive-code-block">
           <div className="interactive-code-content">
             {step1Lines.map((line, index) => (
               <button
                 key={line.id}
-                className={`interactive-code-line ${
-                  line.keyName && selected === line.keyName
+                className={`interactive-code-line ${line.keyName && selected === line.keyName
                     ? "interactive-code-line-active"
                     : ""
-                }`}
+                  }`}
                 onClick={() => {
                   if (line.keyName) {
                     setSelected(line.keyName);
@@ -365,11 +196,11 @@ function InteractiveStep2Code() {
   };
 
   const htmlTargets = {
-    id: [4],
-    class: [5],
-    name: [7, 8, 9],
     innerHTML: [4],
-    alert: [],
+    textContent: [4],
+    setAttribute: [6],
+    classList: [7],
+    style: [5],
   };
 
   const trigger = (action) => {
@@ -385,10 +216,11 @@ function InteractiveStep2Code() {
 
   return (
     <>
-      <div>
-        <div className="code-explanation">
+      <div className="code-explanation">
         <strong>Spiegazione:</strong> {codeSnippets[2].explanation}
       </div>
+
+      <div>
         <div className="code-section-title">HTML</div>
         <div className="interactive-code-block">
           <div className="interactive-code-content">
@@ -404,9 +236,8 @@ function InteractiveStep2Code() {
               return (
                 <button
                   key={index}
-                  className={`interactive-code-line static-code-line ${
-                    isActive ? "interactive-code-line-active" : ""
-                  }`}
+                  className={`interactive-code-line static-code-line ${isActive ? "interactive-code-line-active" : ""
+                    }`}
                   onClick={() => trigger(action)}
                 >
                   <span className="interactive-code-number">{lineNumber}</span>
@@ -436,9 +267,8 @@ function InteractiveStep2Code() {
               return (
                 <button
                   key={index}
-                  className={`interactive-code-line ${
-                    isActive ? "interactive-code-line-active" : ""
-                  }`}
+                  className={`interactive-code-line ${isActive ? "interactive-code-line-active" : ""
+                    }`}
                   onClick={() => trigger(action)}
                 >
                   <span className="interactive-code-number">{lineNumber}</span>
@@ -448,14 +278,211 @@ function InteractiveStep2Code() {
             })}
           </div>
         </div>
-      </div>      
+      </div>
     </>
   );
 }
 
+function InteractiveStep3Code() {
+  const [activeEvent, setActiveEvent] = useState(null);
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (event.detail?.eventType) {
+        setActiveEvent(event.detail.eventType);
+      }
+    };
+
+    window.addEventListener("step3-highlight", handler);
+    return () => {
+      window.removeEventListener("step3-highlight", handler);
+    };
+  }, []);
+
+  const eventLines = {
+    focus: [8],
+    input: [12],
+    blur: [16],
+    change: [20, 24, 28],
+    click: [32],
+  };
+
+  const trigger = (eventType) => {
+    if (!eventType) return;
+
+    setActiveEvent(eventType);
+    window.dispatchEvent(
+      new CustomEvent("step3-highlight", {
+        detail: { eventType },
+      })
+    );
+  };
+
+  return (
+    <>
+      <div>
+        <div className="code-explanation">
+          <strong>Spiegazione:</strong> {codeSnippets[3].explanation}
+        </div>
+        <div className="code-section-title">HTML</div>
+        <StaticCodeBlock title="" code={codeSnippets[3].html} />
+      </div>
+
+      <div>
+        <div className="code-section-title">JavaScript: script.js</div>
+        <div className="interactive-code-block">
+          <div className="interactive-code-content">
+            {step3JsLines.map((line, index) => {
+              const lineNumber = index + 1;
+              const isActive = eventLines[activeEvent]?.includes(lineNumber);
+
+              let eventType = null;
+              if ([8].includes(lineNumber)) eventType = "focus";
+              if ([12].includes(lineNumber)) eventType = "input";
+              if ([16].includes(lineNumber)) eventType = "blur";
+              if ([20, 24, 28].includes(lineNumber)) eventType = "change";
+              if ([32].includes(lineNumber)) eventType = "click";
+
+              return (
+                <button
+                  key={index}
+                  className={`interactive-code-line ${isActive ? "interactive-code-line-active" : ""
+                    }`}
+                  onClick={() => trigger(eventType)}
+                >
+                  <span className="interactive-code-number">{lineNumber}</span>
+                  <span className="interactive-code-text">{line}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function InteractiveStep4Code() {
+  const [activeAction, setActiveAction] = useState(null);
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (event.detail?.action) {
+        setActiveAction(event.detail.action);
+      }
+    };
+
+    window.addEventListener("step4-highlight", handler);
+    return () => window.removeEventListener("step4-highlight", handler);
+  }, []);
+
+  const htmlTargets = {
+    innerHTML: [4],
+    textContent: [4],
+    setAttribute: [6],
+    classList: [7],
+    style: [5],
+  };
+
+  const jsTargets = {
+    innerHTML: [6, 7],
+    textContent: [9, 10],
+    setAttribute: [12],
+    classList: [15],
+    style: [18],
+  };
+
+  const trigger = (action) => {
+    if (!action) return;
+
+    setActiveAction(action);
+    window.dispatchEvent(
+      new CustomEvent("step4-highlight", {
+        detail: { action },
+      })
+    );
+  };
+
+  return (
+    <>
+      <div className="code-explanation">
+        <strong>Spiegazione:</strong> {codeSnippets[4].explanation}
+      </div>
+
+      <div>
+        <div className="code-section-title">HTML</div>
+        <div className="interactive-code-block">
+          <div className="interactive-code-content">
+            {step4HtmlLines.map((line, index) => {
+              const lineNumber = index + 1;
+              const isActive = htmlTargets[activeAction]?.includes(lineNumber);
+
+              let action = null;
+              if ([4].includes(lineNumber)) action = activeAction === "textContent" ? "textContent" : "innerHTML";
+              if ([5].includes(lineNumber)) action = "style";
+              if ([6].includes(lineNumber)) action = "setAttribute";
+              if ([7].includes(lineNumber)) action = "classList";
+
+              return (
+                <button
+                  key={index}
+                  className={`interactive-code-line static-code-line ${isActive ? "interactive-code-line-active" : ""
+                    }`}
+                  onClick={() => action && trigger(action)}
+                >
+                  <span className="interactive-code-number">{lineNumber}</span>
+                  <span className="interactive-code-text">{line}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div className="code-section-title">JavaScript: script.js</div>
+        <div className="interactive-code-block">
+          <div className="interactive-code-content">
+            {step4JsLines.map((line, index) => {
+              const lineNumber = index + 1;
+              const isActive = jsTargets[activeAction]?.includes(lineNumber);
+
+              let action = null;
+              if ([6, 7].includes(lineNumber)) action = "innerHTML";
+              if ([9, 10].includes(lineNumber)) action = "textContent";
+              if ([12].includes(lineNumber)) action = "setAttribute";
+              if ([15].includes(lineNumber)) action = "classList";
+              if ([18].includes(lineNumber)) action = "style";
+
+              return (
+                <button
+                  key={index}
+                  className={`interactive-code-line ${isActive ? "interactive-code-line-active" : ""
+                    }`}
+                  onClick={() => action && trigger(action)}
+                >
+                  <span className="interactive-code-number">{lineNumber}</span>
+                  <span className="interactive-code-text">{line}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default function SidebarCode({ step }) {
-  const current = useMemo(() => codeSnippets[step], [step]);
+  const snippetKey = useMemo(() => {
+    if (step === 3) return 4;
+    if (step === 4 || step === 5) return 3;
+    if (step === 6) return 5;
+    if (step === 7) return 6;
+    return step;
+  }, [step]);
+
+  const current = useMemo(() => codeSnippets[snippetKey], [snippetKey]);
 
   if (step === 1) {
     return (
@@ -481,12 +508,36 @@ export default function SidebarCode({ step }) {
     );
   }
 
-  if (step === 5) {
+  if (step === 3) {
     return (
       <div className="panel">
         <div className="panel-body">
           <div className="code-columns">
-            <EditableCodeStep5 />
+            <InteractiveStep4Code />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 4 || step === 5) {
+    return (
+      <div className="panel">
+        <div className="panel-body">
+          <div className="code-columns">
+            <InteractiveStep3Code />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 7) {
+    return (
+      <div className="panel">
+        <div className="panel-body">
+          <div className="code-columns">
+            <EditableCodeStep6 />
           </div>
         </div>
       </div>
@@ -498,7 +549,7 @@ export default function SidebarCode({ step }) {
       <div className="panel-body">
         <div className="code-columns">
           <div className="code-section-title" style={{ fontSize: "1.3em", fontWeight: "bold", marginBottom: "20px" }}>
-            {step === 3 ? "Step 3: Eventi sui campi input" : step === 4 ? "Step 4: Esercizi" : "Step"}
+            {step === 6 ? "Step 6: Esercizi" : "Step"}
           </div>
 
           <div className="code-explanation">
@@ -506,9 +557,8 @@ export default function SidebarCode({ step }) {
           </div>
 
           <StaticCodeBlock title="HTML" code={current.html} />
-
           <StaticCodeBlock
-            title={step === 4 ? "Traccia" : "JavaScript: script.js"}
+            title={step === 6 ? "Traccia" : "JavaScript: script.js"}
             code={current.js}
           />
         </div>

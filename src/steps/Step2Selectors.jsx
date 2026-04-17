@@ -23,60 +23,7 @@ const actionMap = {
     explanation:
       "getElementsByName restituisce una collezione di elementi con lo stesso attributo name. In questo esempio i tre input funzionano come un piccolo vettore.",
   },
-
-  innerHTML: {
-    title: "innerHTML",
-    htmlTargets: ["title"],
-    explanation: (
-      <>
-        <p>
-          <strong>innerHTML</strong> è una proprietà che permette di leggere o
-          modificare il contenuto interno di un elemento HTML.
-        </p>
-
-        <div className="code-inline">
-          titolo.innerHTML = "Titolo modificato con innerHTML";
-        </div>
-
-        <p>
-          Questo sostituisce completamente il contenuto del tag{" "}
-          <code>&lt;h1&gt;</code>.
-        </p>
-
-        <p>
-          <strong>Differenza con textContent:</strong>
-        </p>
-
-        <div className="code-compare">
-          <div className="code-compare-box">
-            <div className="code-compare-title">innerHTML</div>
-            <div className="code-inline">
-              titolo.innerHTML = "&lt;strong&gt;Primo&lt;/strong&gt; Titolo della
-              nostra pagina";
-            </div>
-            <p>Interpreta HTML: il testo diventa formattato.</p>
-          </div>
-
-          <div className="code-compare-box">
-            <div className="code-compare-title">textContent</div>
-            <div className="code-inline">
-              titolo.textContent = "Primo Titolo della nostra pagina";
-            </div>
-            <p>Mostra solo testo: i tag NON vengono interpretati.</p>
-          </div>
-        </div>
-
-        <p>
-          <strong>Attenzione:</strong> innerHTML sostituisce tutto il contenuto
-          ed interpreta eventuale HTML.
-          <br />
-          Se volessi aggiungere del testo al contenuto esistente, dovresti fare:{" "}
-          <code>titolo.innerHTML += " Nuovo testo"</code>.
-        </p>
-      </>
-    ),
-  },
-
+ 
   alert: {
     title: "alert",
     htmlTargets: [],
@@ -197,7 +144,7 @@ export default function Step2Selectors() {
         <div className="panel-header">Selettori disponibili</div>
         <div className="panel-body">
           <div className="button-row">
-            {["id", "class", "name", "innerHTML", "alert"].map((action) => (
+            {["id", "class", "name", "alert"].map((action) => (
               <button
                 key={action}
                 className={`small-btn ${
@@ -262,23 +209,43 @@ export default function Step2Selectors() {
                   />
                 );
               })}
-            </div>
-
-            {activeAction === "name" && (
-              <div className="fake-console">
-                <div className="console-header">Console</div>
-                <div className="console-body">
-                  {consoleOutput.map((line, index) => (
-                    <div key={index} className="console-line">
-                      {line}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            </div>            
           </div>
         </div>
       </div>
+
+      {activeAction === "name" && (
+  <div className="panel">
+    <div className="panel-header">Console JavaScript</div>
+    <div className="panel-body">
+      
+      <p>
+        In JavaScript possiamo usare <code>console.log()</code> per stampare
+        informazioni utili durante l’esecuzione del programma.
+      </p>
+
+      <div className="code-inline">
+        console.log("Numero di campi email:", email.length);
+      </div>
+
+      <p>
+        Qui simuliamo l’output della console mentre scorriamo la collezione
+        restituita da <code>getElementsByName</code>.
+      </p>
+
+      <div className="fake-console">
+        <div className="console-header">Console</div>
+        <div className="console-body">
+          {consoleOutput.map((line, index) => (
+            <div key={index} className="console-line">
+              {line}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

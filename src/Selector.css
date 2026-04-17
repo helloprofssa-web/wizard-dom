@@ -147,7 +147,7 @@
 }
 
 .fake-console {
-  margin-top: 16px;
+  margin-top: 12px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #1e293b;
@@ -171,4 +171,13 @@
 
 .console-line {
   line-height: 1.5;
+}
+.dom-manip-box-active {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  border-color: #2563eb;
+}
+
+.dom-style-active {
+  color: crimson;
+  font-weight: 700;
 }

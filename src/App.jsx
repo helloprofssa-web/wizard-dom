@@ -5,6 +5,7 @@ import {
   TreePine,
   MousePointerClick,
   FormInput,
+  Wand2,
   PencilRuler,
   Code,
 } from "lucide-react";
@@ -13,7 +14,9 @@ import "./App.css";
 import SidebarCode from "./components/SidebarCode";
 import Step1Dom from "./steps/Step1Dom";
 import Step2Selectors from "./steps/Step2Selectors";
+import Step3EventsIntro from "./steps/Step3EventsIntro";
 import Step3Events from "./steps/Step3Events";
+import Step4DomManipulation from "./steps/Step4DomManipulation";
 import Step4Exercises from "./steps/Step4Exercises";
 import Step5DynamicHtml from "./steps/Step5DynamicHtml";
 import Footer from "./components/Footer";
@@ -23,7 +26,7 @@ const stepMeta = [
     id: 1,
     short: "DOM",
     title: "Il DOM - Document Object Model",
-    subtitle: "Passaggio 1",
+    subtitle: "Step 1",
     description:
       "La pagina HTML viene rappresentata dal browser come un albero di nodi.",
     icon: TreePine,
@@ -32,34 +35,52 @@ const stepMeta = [
     id: 2,
     short: "Selettori",
     title: "ID, classi e selezione",
-    subtitle: "Passaggio 2",
+    subtitle: "Step 2",
     description:
       "Selezioniamo gli elementi con id, class e name, e mostriamo innerHTML e alert.",
     icon: MousePointerClick,
   },
   {
     id: 3,
-    short: "Eventi",
-    title: "Form ed eventi",
-    subtitle: "Passaggio 3",
+    short: "Modifica DOM",
+    title: "Modificare il DOM",
+    subtitle: "Step 3",
     description:
-      "Colleghiamo gli eventi agli input e mostriamo il ruolo di value.",
-    icon: FormInput,
+      "Vediamo come JavaScript può modificare contenuto, attributi, classi e stile degli elementi della pagina.",
+    icon: Wand2,
   },
   {
     id: 4,
+    short: "Eventi",
+    title: "Teoria degli eventi",
+    subtitle: "Step 4",
+    description:
+      "Scopriamo cosa sono gli eventi e la differenza tra gestori scritti nel tag HTML e addEventListener.",
+    icon: FormInput,
+  },
+  {
+    id: 5,
+    short: "Form",
+    title: "Form ed eventi",
+    subtitle: "Step 5",
+    description:
+      "Usiamo gli eventi in un form per leggere value e checked e reagire alle azioni dell'utente.",
+    icon: FormInput,
+  },
+  {
+    id: 6,
     short: "Esercizi",
     title: "Esercizi",
-    subtitle: "Passaggio 4",
+    subtitle: "Step 6",
     description:
       "Attività finali da svolgere con gli alunni in laboratorio.",
     icon: PencilRuler,
   },
   {
-    id: 5,
+    id: 7,
     short: "Dinamico",
     title: "HTML Dinamico",
-    subtitle: "Passaggio 5",
+    subtitle: "Step 7",
     description:
       "Scrivi il tuo codice HTML e esplora il DOM in tempo reale.",
     icon: Code,
@@ -72,8 +93,9 @@ function TopPanel() {
       <div>
         <h1>JavaScript e DOM</h1>
         <p>
-          Un percorso guidato in 5 step per mostrare come JavaScript lavora
-          dentro una pagina HTML: DOM, selezione degli elementi, script, eventi e HTML dinamico.
+          Un percorso guidato in 7 step per mostrare come JavaScript lavora
+          dentro una pagina HTML: DOM, selezione degli elementi, script, eventi,
+          modifica del DOM ed HTML dinamico.
         </p>
       </div>
     </div>
@@ -105,14 +127,17 @@ function StepHeader({ step }) {
 function renderStep(step) {
   if (step === 1) return <Step1Dom />;
   if (step === 2) return <Step2Selectors />;
-  if (step === 3) return <Step3Events />;
-  if (step === 4) return <Step4Exercises />;
+  if (step === 3) return <Step4DomManipulation />;
+  if (step === 4) return <Step3EventsIntro />;
+  if (step === 5) return <Step3Events />;
+  if (step === 6) return <Step4Exercises />;
   return <Step5DynamicHtml />;
 }
 
 export default function App() {
   const [step, setStep] = useState(1);
   const progress = (step / stepMeta.length) * 100;
+  const showSidebar = step !== 4;
 
   return (
     <div className="app-shell">
@@ -135,8 +160,8 @@ export default function App() {
         ))}
       </div>
 
-      <div className="main-layout">
-        <SidebarCode step={step} />
+      <div className={`main-layout ${showSidebar ? "" : "full"}`.trim()}>
+        {showSidebar ? <SidebarCode step={step} /> : null}
 
         <div className="page-content">
           <StepHeader step={step} />
@@ -150,9 +175,7 @@ export default function App() {
           onClick={() => setStep((s) => Math.max(1, s - 1))}
           disabled={step === 1}
         >
-          <span
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
             <ChevronLeft size={16} />
             Indietro
           </span>
@@ -177,15 +200,14 @@ export default function App() {
           onClick={() => setStep((s) => Math.min(stepMeta.length, s + 1))}
           disabled={step === stepMeta.length}
         >
-          <span
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
             Avanti
             <ChevronRight size={16} />
           </span>
         </button>
       </div>
-       <Footer />
+
+      <Footer />
     </div>
   );
 }
