@@ -73,7 +73,7 @@ const stepMeta = [
     title: "Esercizi",
     subtitle: "Step 6",
     description:
-      "Attività finali da svolgere con gli alunni in laboratorio.",
+      "Svolgi gli esercizi proposti per mettere in pratica i concetti appresi negli step precedenti.",
     icon: PencilRuler,
   },
   {

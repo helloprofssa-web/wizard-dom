@@ -45,10 +45,14 @@ function EditableCodeStep6() {
     </style>
   </head>
   <body>
+    <div id="container">
     <h1 id="titolo">Titolo della Pagina</h1>
     <p class="messaggio">Questo è un paragrafo con classe messaggio.</p>
+   </div>
+   <div id="form">
     <input type="text" name="email" value="studente@example.com">
     <button id="bottone">Cliccami</button>
+   </div>
   </body>
 </html>`);
 
@@ -557,10 +561,12 @@ export default function SidebarCode({ step }) {
           </div>
 
           <StaticCodeBlock title="HTML" code={current.html} />
-          <StaticCodeBlock
-            title={step === 6 ? "Traccia" : "JavaScript: script.js"}
-            code={current.js}
-          />
+          {step !== 6 && (
+            <StaticCodeBlock
+              title="JavaScript: script.js"
+              code={current.js}
+            />
+          )}
         </div>
       </div>
     </div>

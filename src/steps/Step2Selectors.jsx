@@ -174,7 +174,7 @@ export default function Step2Selectors() {
       </div>
 
       <div className="panel">
-        <div className="panel-header">Pagina di esempio</div>
+        <div className="panel-header">Anteprima della pagina</div>
         <div className="panel-body">
           <div className="demo-card">
             <h2

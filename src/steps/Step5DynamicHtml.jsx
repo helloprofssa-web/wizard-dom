@@ -89,6 +89,7 @@ export default function Step5DynamicHtml() {
   const [selectedElement, setSelectedElement] = useState("");
   const [showGeneratedTree, setShowGeneratedTree] = useState(true);
   const [treeError, setTreeError] = useState("");
+  const [iframeLoaded, setIframeLoaded] = useState(0);
   const iframeRef = useRef(null);
 
   // Ascolta gli aggiornamenti dal SidebarCode
@@ -178,7 +179,7 @@ export default function Step5DynamicHtml() {
       console.log("Errore nella lettura dell'albero DOM:", error);
       return null;
     }
-  }, [htmlCode, fullHtmlCode, showGeneratedTree]);
+  }, [htmlCode, fullHtmlCode, showGeneratedTree, iframeLoaded]);
 
   const generateDomTree = () => {
     try {
@@ -194,12 +195,17 @@ export default function Step5DynamicHtml() {
 
       setShowGeneratedTree(true);
       setTreeError("");
+      setIframeLoaded((value) => value + 1);
     } catch (error) {
       console.log("Errore nella generazione dell'albero DOM:", error);
       setShowGeneratedTree(false);
       setTreeError("Non sono riuscito a generare il DOM dall'HTML corrente.");
     }
   };
+
+  useEffect(() => {
+    generateDomTree();
+  }, [fullHtmlCode]);
 
   return (
     <div className="page-content">
@@ -263,6 +269,11 @@ export default function Step5DynamicHtml() {
             <iframe
               ref={iframeRef}
               srcDoc={fullHtmlCode}
+              onLoad={() => {
+                setTreeError("");
+                setShowGeneratedTree(true);
+                setIframeLoaded((value) => value + 1);
+              }}
               style={{
                 width: "100%",
                 height: "100%",

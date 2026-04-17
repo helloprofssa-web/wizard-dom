@@ -37,7 +37,7 @@ export default function Step1Dom() {
   return (
     <div className="page-content">
       <div className="panel">
-        <div className="panel-header">Pagina di esempio</div>
+        <div className="panel-header">Anteprima della pagina</div>
         <div className="panel-body">
           <div className={`demo-box demo-box-blue ${isActive("pagina", selected) ? "dom-highlight" : ""}`}>
             <div className={`demo-box demo-box-violet ${isActive("sezione1", selected) ? "dom-highlight" : ""}`}>

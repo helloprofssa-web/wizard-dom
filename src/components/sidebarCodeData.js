@@ -95,6 +95,11 @@ export const step3JsLines = [
   "});",
   "",
   'bottone.addEventListener("click", function () {',
+  '  if (inputNome.value.trim() === "") {',
+  '    output.innerHTML = "Inserisci il tuo nome prima di continuare.";',
+  '    inputNome.focus();',
+  '    return;',
+  '  }',
   '  alert("Ciao " + inputNome.value);',
   "});",
 ];
@@ -194,7 +199,8 @@ alert("Questo è un esempio di alert.");`,
     <title>Eventi sui campi input</title>
   </head>
   <body>
-    <input id="nome" type="text" placeholder="Scrivi il tuo nome"/>
+    <input id="nome" type="text" placeholder="Scrivi il tuo nome" 
+      required/>
     <br><br>
     <input type="radio" name="genere" value="maschio" id="maschio"/> 
     <label for="maschio">Maschio</label>
@@ -231,11 +237,11 @@ alert("Questo è un esempio di alert.");`,
 <html lang="it">
   <body>
     <h1 id="titolo">Esercizi DOM</h1>
-    <p id="descrizione">Questo paragrafo può essere modificato con JavaScript.</p>
-
+    <p id="descrizione">Modifica questo paragrafo con JavaScript.</p>
+    <h2>Sezione 1</h2>
     <p class="nota">Prima nota</p>
     <p class="nota">Seconda nota</p>
-
+    <h2>Sezione 2</h2>
     <input type="text" name="studente" value="Anna" />
     <input type="text" name="studente" value="Luca" />
     <input type="text" name="studente" value="Marta" />
@@ -249,34 +255,7 @@ alert("Questo è un esempio di alert.");`,
 
     <script src="script.js"></script>
   </body>
-</html>`,
-    js: `// 1. Modifica un elemento con getElementById
-const descrizione = document.getElementById("descrizione");
-descrizione.textContent = "Paragrafo modificato con getElementById.";
-
-// 2. Seleziona due paragrafi con la stessa classe
-const note = document.getElementsByClassName("nota");
-console.log("Numero di paragrafi con classe nota:", note.length);
-
-// 3. Leggi una collezione di input con lo stesso name
-const studenti = document.getElementsByName("studente");
-for (let i = 0; i < studenti.length; i++) {
-  console.log("Studente", i + 1, "=", studenti[i].value);
-}
-
-// 4. Alert con input e bottone
-const inputNome = document.getElementById("nome");
-const bottone = document.getElementById("saluta");
-const output = document.getElementById("output");
-
-bottone.addEventListener("click", function () {
-  alert("Ciao " + inputNome.value);
-});
-
-// 5. Aggiornamento in tempo reale con evento input
-inputNome.addEventListener("input", function () {
-  output.textContent = "Stai scrivendo: " + inputNome.value;
-});`,
+</html>`,   
     explanation:
       "Questo codice-base raccoglie gli stessi concetti degli esercizi: selezione con id, class e name, alert su click ed evento input in tempo reale.",
   },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../App.css";
 import { inputEvents, buttonEvents, radioEvents, checkboxEvents, selectEvents } from "./eventsData";
 
@@ -99,6 +99,7 @@ export default function Step3Events() {
   const [showCheckboxModal, setShowCheckboxModal] = useState(false);
   const [showSelectModal, setShowSelectModal] = useState(false);
   const [showInputModal, setShowInputModal] = useState(false);
+  const nameInputRef = useRef(null);
 
   useEffect(() => {
     const handler = (event) => {
@@ -168,16 +169,18 @@ export default function Step3Events() {
       </div>
 
       <div className="panel">
-        <div className="panel-header">Form di esempio</div>
+        <div className="panel-header">Anteprima della pagina</div>
         <div className="panel-body">
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div>
               <label>Nome</label>
               <input
                 id="nome"
+                ref={nameInputRef}
                 type="text"
                 className="input"
                 value={name}
+                required
                 placeholder="Scrivi il tuo nome"
                 onChange={(e) => {
                   setName(e.target.value);
@@ -272,21 +275,22 @@ export default function Step3Events() {
               id="saluta"
               className="primary-btn"
               onClick={() => {
-                window.alert(`Ciao ${name || "studente"}!`);
+                if (!name.trim()) {
+                  setMessage("Inserisci il tuo nome prima di continuare.");
+                  nameInputRef.current?.focus();
+                  nameInputRef.current?.reportValidity?.();
+                  window.dispatchEvent(new CustomEvent('step3-code-highlight', { detail: { line: 32 } }));
+                  return;
+                }
+
+                window.alert(`Ciao ${name}!`);
                 window.dispatchEvent(new CustomEvent('step3-code-highlight', { detail: { line: 32 } }));
               }}
             >
-              Alert di saluto
+             Saluta
             </button>
 
-            <button
-              className="secondary-btn"
-              onClick={() =>
-                setMessage(`Click sul bottone con nome = ${name || "(vuoto)"}`)
-              }
-            >
-              Simula click
-            </button>
+            
           </div>
         </div>
       </div>
@@ -345,6 +349,14 @@ export default function Step3Events() {
                   </code>
                 </div>
               </div>
+            </div>
+
+            <div style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px", background: "#eef2ff" }}>
+              <h4 style={{ margin: "0 0 12px", color: "#3730a3" }}>✅ Proprietà <code>required</code></h4>
+              <p style={{ margin: 0, color: "#312e81", lineHeight: "1.6" }}>
+                La proprietà <strong>required</strong> rende obbligatoria la compilazione di un campo del form.
+                Se l'input è vuoto, il browser o JavaScript possono bloccare l'azione e chiedere all'utente di inserire un valore prima di proseguire.
+              </p>
             </div>
 
             <div style={{ border: "1px solid #e2e8f0", borderRadius: "8px", padding: "16px", background: "#fef3c7" }}>
